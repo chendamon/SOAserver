@@ -1,0 +1,36 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    div.container
+      img.logo(src="images/infinity.png")
+      div.form.row
+        form#register_form.form-horizontal.col-sm-offset-3.col-md-offset-3.col-sm-6.col-md-6(action="/register",method="post")
+          h3.col-sm-12.col-md-12.form-title 用户注册
+          div.col-sm-12.col-sm-12.col-md-12
+            div.form-group
+              i.fa.fa-lock.fa-lg
+              input.form-control.required(type="text",placeholder="用户名",name="username",autofocus="autofocus",maxlength="20")
+            div.form-group
+              i.fa.fa-lock.fa-lg
+              input.form-control.required(type="text",placeholder="真实姓名",name="truename",maxlength="20")
+            div.form-group
+              i.fa.fa-lock.fa-lg
+              input#password.form-control.required(type="password",placeholder="密码",name="password",maxlength="12")
+            div.form-group
+              i.fa.fa-lock.fa-lg
+              input.form-control.required(type="password",placeholder="确认密码",name="rpassword",maxlength="12")
+            div.form-group
+              input.btn.btn-success.btn-block(type="submit",value="注册")
+            if(locals.message)
+              h4.col-sm-12.col-md-12.errormessage #{message}
+
+
+    script(src='/javascripts/jquery-3.3.1.min.js')
+    script(src='/bootstrap/js/bootstrap.min.js')
+    script(src='/javascripts/jquery.validate.min.js')
+    script(src='/javascripts/additional-methods.js')
+    script(src='/javascripts/errormessage.js')
