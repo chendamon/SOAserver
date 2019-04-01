@@ -1,6 +1,40 @@
 body {
   background-color: #2196F3;
 }
+.white{
+  background-color: white;
+}
+.bg-myprimary{
+  background-color: #2196F3;
+  color: white;
+}
+.left{
+  float: left;
+}
+.right{
+  float: right;
+}
+.navicon{
+  max-height: 100%;
+  width:auto;
+  float:left;
+}
+.max-height{
+  max-height: 50px;
+}
+.nav-line{
+  line-height: 50px;
+  float:left;
+  font-size: 18px;
+}
+.nav-form{
+  float: left;
+}
+.my-btn{
+  margin-left: 10px;
+  height:36px;
+  margin-top:7px;
+}
 .logo{
   display:block;
   float:none;
