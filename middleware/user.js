@@ -1,4 +1,6 @@
 var User = require('../models/user');
+var passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 //register
 var postUser = function(req,res){
@@ -23,12 +25,14 @@ var postUser = function(req,res){
   });
 }
 //visit app page
-var authed = function(req,res){
+var authed = function(req,res,done){
   if(!req.session.user){
     res.redirect('/login');
     return;
   }else{
-    res.render('apps',{username:req.session.user.username});
+    console.log('user ',req.session.user);
+    req.user = req.session.user;
+    done(null,req.user);
   }
 
 }
@@ -45,7 +49,7 @@ var authenticate = function(req,res){
         if(match && !err){
           //用户登录成功
           req.session.user = user;
-          res.render('apps',{username:user.username});
+          res.render('apps',{username:user.truename});
         }else{
           res.render('login',{message:'密码错误！'});
         }
@@ -53,8 +57,33 @@ var authenticate = function(req,res){
     }
   });
 }
+//user userprofile
+var profile = function(req,res){
+  User.findOne({username:req.user.username},function(err,user){
+    if(err){
+      res.json({data:err});
+      return;
+    }
+    res.json({data:user});
+  });
+}
+//localstreagy 认证
+passport.use('local',new LocalStrategy(
+  function(username, password, done){
+    console.log('username ',username,' password',password);
+    User.findOne({username:username}, function(err, user){
+      if (err) return done(err);
+      if (!user) return done(null, false,{message:'user not'});
+      console.log(user.password,' ',password);
+      if (user.password !== password) return done(null, false);
+      return done(null, user);
+    });
+  }
+));
 module.exports = {
   postUser:postUser,
   authenticate:authenticate,
   authed:authed,
+  profile:profile,
+  isAuthenticated: passport.authenticate('local', { session: false }),
 };

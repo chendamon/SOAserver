@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>用户授权</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+  </head>
+  <body class="white">
+    <div class="col-sm-offset-4 col-md-offset-4 col-sm-4 col-md-4 auth-block">
+      <h4 class="posi">&nbsp; &nbsp;<b><%= user.truename %></b>您好，应用<b><%= client.name %></b>正在申请访问您的账户信息，是否允许？</h4>
+      <form style="height:50px;margin-top:40px;padding-left:200px;" action="/oauth2/authorize" method="post">
+        <input name="transaction_id" type="hidden" value=<%= transactionID %> />
+        <input name="user" type="hidden" value=<%= user %> />
+        <button class="btn btn-danger" style="height:36px;width:auto;" type="submit" value="Deny">拒绝</button>
+        <button class="btn btn-success" style="height:36px;width:auto;margin-left:50px;" type="submit" value="Allow">同意</button>
+      </form>
+    </div>
+  </body>
+</html>

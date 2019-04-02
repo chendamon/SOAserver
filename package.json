@@ -17,7 +17,10 @@
     "http-errors": "~1.6.2",
     "mongoose": "^5.4.20",
     "morgan": "~1.9.0",
+    "oauth2orize": "^1.11.0",
     "passport": "^0.4.0",
+    "passport-http": "^0.3.0",
+    "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "pug": "^2.0.3"
   }
