@@ -1,0 +1,9 @@
+client_id: '_nextcloud',
+  client_secret: 'DaenerysStormborns-1211-Khaleesi',
+  grant_type: 'authorization_code',
+  redirect_uri: 'http://localhost:8080/apps/sociallogin/custom_oauth2/Oauth2.0test',
+  code: 'LFXesDybj2r7vKZR' },
+
+//解析userprofile 出错
+Signed API request has returned an error. HTTP error 500. Raw Provider API response:
+<!DOCTYPE html> <html> <body> <h1>Cast to ObjectId failed for value &#34;biront&#34; at path &#34;_id&#34; for model &#34;User&#34;</h1> </body> </html> .

@@ -1,14 +1,17 @@
 var User = require('../models/user');
+var Client = require('../models/clients');
 var passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const login = require('connect-ensure-login');
 
-//register
+//用户注册
 var postUser = function(req,res){
   var user = new User({
     username:req.body.username,
     password:req.body.password,
     truename:req.body.truename,
   });
+  //console.log('register user:',user);
   //在入库前验证用户是否已经存在
   User.findOne({username:user.username},function(err,a_user){
     if(a_user){
@@ -18,25 +21,24 @@ var postUser = function(req,res){
   });
   user.save(function(err){
     if(err){
-      res.json({message:'用户注册失败！',data:err});
+      res.render('register',{message:'用户注册失败！'});
       return;
     }
-    res.json({message:'用户注册成功！',data:user});
+    res.render('login',{message:'用户注册成功，请登录！'});
   });
 }
-//visit app page
+//访问app列表前检测是否已经登录
 var authed = function(req,res,done){
   if(!req.session.user){
     res.redirect('/login');
     return;
   }else{
-    console.log('user ',req.session.user);
     req.user = req.session.user;
     done(null,req.user);
   }
 
 }
-//login
+//登录认证
 var authenticate = function(req,res){
   User.findOne({ username:req.body.username },function(err,user){
     if(err)
@@ -49,7 +51,10 @@ var authenticate = function(req,res){
         if(match && !err){
           //用户登录成功
           req.session.user = user;
-          res.render('apps',{username:user.truename});
+          //添加clients 2019.04.04
+          Client.find({}).sort({'created':-1}).exec(function(err,fcs){
+            res.render('apps', { username: user.truename, clients:fcs });
+          });
         }else{
           res.render('login',{message:'密码错误！'});
         }
@@ -58,32 +63,20 @@ var authenticate = function(req,res){
   });
 }
 //user userprofile
+//返回json字符串 2019.04.04
 var profile = function(req,res){
   User.findOne({username:req.user.username},function(err,user){
     if(err){
       res.json({data:err});
       return;
     }
-    res.json({data:user});
+    console.log('user profile: ',user.username);
+    res.json({identifier:user.username,displayName:user.truename});
   });
 }
-//localstreagy 认证
-passport.use('local',new LocalStrategy(
-  function(username, password, done){
-    console.log('username ',username,' password',password);
-    User.findOne({username:username}, function(err, user){
-      if (err) return done(err);
-      if (!user) return done(null, false,{message:'user not'});
-      console.log(user.password,' ',password);
-      if (user.password !== password) return done(null, false);
-      return done(null, user);
-    });
-  }
-));
 module.exports = {
   postUser:postUser,
   authenticate:authenticate,
   authed:authed,
   profile:profile,
-  isAuthenticated: passport.authenticate('local', { session: false }),
 };

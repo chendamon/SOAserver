@@ -75,3 +75,10 @@ body {
   text-align:center;
   color:red;
 }
+.app{
+  margin-top: 10px;
+  padding-top: 10px;
+  border:1px solid;
+  border-radius:15px;
+  box-shadow: 5px 5px 5px #2196F3;
+}

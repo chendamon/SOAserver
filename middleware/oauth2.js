@@ -5,6 +5,10 @@ var Client = require('../models/clients');
 var Token = require('../models/token');
 var Code = require('../models/code');
 
+var passport = require('passport');
+var BasicStrategy = require('passport-http').BasicStrategy;
+
+//client的序列化和反序列化
 var server = oauth2orize.createServer();
 server.serializeClient(function(client,cb){
   return cb(null,client._id);
@@ -19,7 +23,7 @@ server.deserializeClient(function(id, cb) {
 });
 //生成code
 server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, done) {
-  console.log('userid',user,' clientid',client);
+  //console.log('userid',user,' clientid',client);
   var cs = new Code({
     value:uid(16),
     clientId:client.clientId,
@@ -31,27 +35,41 @@ server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, do
     return done(null, cs.value);
   });
 }));
-//client用code交换token
-//code删除的问题？
-server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, done) {
-  console.log('exchange');
-  Code.findOne({value:code}, function(err, authcode) {
-    if (err) { return done(err); }
-    if (client.clientId !== code.clientId) { return done(null, false); }
-    if (redirectURI !== code.redirectUri) { return done(null, false); }
 
-    var token = utils.uid(256);
-    var at = new Token({
-      value:token,
-      userId:code.userId,
-      clientId:code.clientId});
-    at.save(function(err) {
-      if (err) { return done(err); }
-      return done(null, token);
+//尝试直接重写 client认证+token exchange
+//date 2019.04.04
+exports.mytoken = function(req,res){
+  Client.findOne({clientId:req.body.client_id}, function(error, client){
+    if(error || !client || client.clientSecret !== req.body.client_secret){
+      res.json({message:'err',data:'error'});
+    }
+    console.log('token client:',client.clientId);
+    Code.findOne({value:req.body.code}, function(err, authcode) {
+      if(err || req.body.client_id !== authcode.clientId || req.body.redirect_uri !== authcode.redirectUri){
+        res.json({message:'err',data:'error'});
+      }
+      console.log('token code:',authcode.value);
+      var token = uid(256);
+      var at = new Token({
+        value:token,
+        userId:authcode.userId,
+        clientId:authcode.clientId});
+      console.log('token: ',token);
+      //Code用完之后可以删除
+      //2019.04.05
+      authcode.remove(function(err){
+        if(err)
+          res.json({message:'err',data:err});
+      });
+      at.save(function(err) {
+        if (err) res.json({message:'err',data:err});
+        res.json({access_token:token});
+      });
     });
-  });
-}));
-//auth 流程
+    });
+
+}
+//OAuth2.0 流程
 exports.authorization = [
   server.authorize(function(clientID, redirectURI, done) {
     Client.findOne({clientId:clientID}, function(err, client) {
@@ -62,7 +80,7 @@ exports.authorization = [
     });
   }),
   function(req, res) {
-    console.log('req user',req.user);
+    //console.log('req user',req.user);
     res.render('dialog',
       {
         transactionID: req.oauth2.transactionID,
@@ -73,11 +91,6 @@ exports.authorization = [
 exports.decision =[
   server.decision(),
 ]
-exports.token =[
-  server.token(),
-  server.errorHandler(),
-]
-
 function uid(len){
   var buf = [];
   var charts = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var bodyparser = require('body-parser');
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
 var router = express.Router();
 
 var indexRouter = require('./routes/index');
@@ -14,33 +15,33 @@ var register = require('./routes/register');
 var apps = require('./routes/apps');
 
 var usercontrol = require('./middleware/user');
-var clientcontrol = require('./middleware/client');
 var oauth2 = require('./middleware/oauth2');
 var auth = require('./middleware/auth');
 
+//读取预设值
+var config = require('./config');
+
 var app = express();
 //数据库
-mongoose.connect('mongodb://127.0.0.1:27017/SSO');
+mongoose.connect(config.get('mongoose:uri'));
+//mongoose.connect('mongodb://127.0.0.1:27017/SSO');
 mongoose.Promise = global.Promise;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-//app.use(logger('dev'));
-//app.use(express.json());
-//app.use(express.urlencoded({ extended: false }));
-//app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 //session 配置
-//app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended:true }));
+app.use(cookieParser());
+app.use(bodyparser.json({ extended: false }));
+app.use(bodyparser.urlencoded({ extended:false }));
 app.use(session({
   secret:'sdfdasds-454-dfsadfa-sdfas',
-  cookie: { maxAge: 60 * 60 * 1000 },
-  saveUninitialized:true,
-  resave:true
+  saveUninitialized:false,
+  resave:false,
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -53,15 +54,15 @@ router.route('/').get(usercontrol.authed, apps.applist);
 router.route('/oauth2/authorize')
   .get(usercontrol.authed,oauth2.authorization)
   .post(usercontrol.authed,oauth2.decision);
-router.route('/oauth2/token')
-  .post(clientcontrol.verifyClient,oauth2.token);
 router.route('/userprofile').get(auth.tokenAuthed,usercontrol.profile);
+
 //login and register
 app.post('/logout',apps.logout);
 app.get('/login',login.form);
 app.post('/login',usercontrol.authenticate);
 app.get('/register',register.form);
 app.post('/register',usercontrol.postUser);
+app.post('/oauth2/token',oauth2.mytoken);
 
 
 
@@ -81,5 +82,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+//从config读取端口信息
+
 
 module.exports = app;
