@@ -5,6 +5,8 @@
     <link rel="icon" type="image/x-icon" href="/images/infinity.ico">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
+    <script type="text/javascript" src="/javascripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
   </head>
   <body class="white">
     <!--标题栏-->
@@ -15,15 +17,30 @@
         </a>
         <p class="nav-line">应用列表</p>
         <div class="inline max-height right">
-          <p class="nav-line nav-username" id="username"><%= username %></p>
-          <form class="max-height nav-form" action="/logout" method="post">
-            <button class="btn btn-success my-btn" type="submit">
-              登出
-            </button>
-          </form>
+          <div class="dropdown" style="height:50px;">
+            <div role="button" class="dropdown-toggle line-button" id="dropdownMenu" data-toggle="dropdown">
+              <p style="line-height:50px;font-size:18px;"><%= user.truename %></p>
+            </div>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="max-width:100px;">
+              <li class="drop-line">
+                <a href="javascript:document:cp_form.submit();">修改密码</a>
+              </li>
+              <li class="drop-line">
+                  <a href="javascript:document:logout_form.submit();">登出</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
+    <!--hidden form，用来传递参数-->
+    <form id="logout_form" action="/logout" method="post">
+
+    </form>
+    <form id="cp_form" action="/passwd" method="post">
+      <input type="hidden" name="username" value=<%= user.username %> />
+    </form>
+
     <!--app列表-->
     <% clients.forEach(function(client){ %>
     <div class="app col-sm-offset-2 col-md-offset-2 col-sm-8 col-md-8" style="padding-left:0;padding-right:0;">

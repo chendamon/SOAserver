@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var Client = require('../models/clients');
 var passport = require('passport');
+var bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
 
 //用户注册
@@ -53,7 +54,7 @@ var authenticate = function(req,res){
           req.session.user = user;
           //添加clients 2019.04.04
           Client.find({}).sort({'created':-1}).exec(function(err,fcs){
-            res.render('apps', { username: user.truename, clients:fcs });
+            res.render('apps', { user: user, clients:fcs });
           });
         }else{
           res.render('login',{message:'密码错误！'});
@@ -79,9 +80,41 @@ var profile = function(req,res){
 //重定向解决session问题
 //2019.04.07
 var relogin = function(req,res){
-
   req.session.user = null;
   res.redirect('/');
+}
+//更新用户密码
+//2019.04.09
+var updateUser = function(req,res){
+  User.findOne({username:req.session.user.username},function(err,user){
+    if(err){
+      res.json({data:err});
+      return;
+    }
+    user.vaerifyPassword(req.body.oldPassword,function(err,match){
+      if(match && !err){
+        //更新用户密码
+        //用户密码加密
+        bcrypt.genSalt(10,function(err,salt){
+          bcrypt.hash(req.body.newPassword,salt,function(err,hash){
+            //console.log('hash',hash);
+            User.updateOne({username:req.session.user.username},{password:hash},function(err){
+              if(err){
+                res.json({data:err});
+                return;
+              }
+              //重定向至登录界面
+              req.session.user = null;
+              res.render('login',{message:'密码修改成功，请登录！'})
+            });
+          });
+        });
+      }else{
+        res.render('passwd',{message:'原始密码错误！'});
+      }
+    });
+  });
+
 }
 module.exports = {
   postUser:postUser,
@@ -89,4 +122,5 @@ module.exports = {
   authed:authed,
   profile:profile,
   relogin:relogin,
+  updateUser:updateUser,
 };

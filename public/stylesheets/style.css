@@ -97,3 +97,16 @@ body {
     font-weight: bold;
     color:#FF3333 ;
 }
+.line-button{
+  height:50px;
+  min-width: 80px;
+  text-align: center;
+  width:auto;
+  border-radius:5px;
+}
+.drop-line{
+  font-size:16px;
+}
+#dropdownMenu:hover,.open{
+  background-color: #2184F3;
+}

@@ -13,9 +13,50 @@ $().ready(function() {
 			password: {
 				required: "请输入密码",
 				minlength: "密码不能小于6个字符",
-				minlength: "密码不能多于12个字符",
+				maxlength: "密码不能多于12个字符",
 			},
 		}
+	});
+	$("#passwd_form").validate({
+		rules:{
+			oldPassword: {
+				required: true,
+				legaltest_password:true,
+				minlength: 6,
+				maxlength:12,
+			},
+			newPassword: {
+				required: true,
+				legaltest_password:true,
+				minlength: 6,
+				maxlength:12,
+				notEqual:"#oldPassword",
+			},
+			newrPassword:{
+				required:true,
+				equalTo: "#newPassword"
+			}
+		},
+		messages:{
+			oldPassword:{
+				required: "请输入您的原始密码",
+				minlength: "密码不能小于6个字符",
+				maxlength: "密码不能多于12个字符",
+				legaltest_password:"密码不合法",
+			},
+			newPassword:{
+				required: "请输入您的新密码",
+				minlength: "密码不能小于6个字符",
+				maxlength: "密码不能多于12个字符",
+				legaltest_password:"密码不合法",
+				notEqual:"新密码不能与原始密码相同",
+			},
+			newrPassword:{
+				required:"请确认您的密码",
+				equalTo: "密码不一致",
+			}
+		}
+
 	});
 	$("#register_form").validate({
 		rules: {
@@ -38,6 +79,7 @@ $().ready(function() {
 				maxlength:12,
 			},
 			rpassword: {
+				required:true,
 				equalTo: "#password"
 			},
 		},

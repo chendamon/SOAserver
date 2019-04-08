@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>修改密码</title>
+    <link rel="icon" type="image/x-icon" href="/images/infinity.ico">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
+    <script type="text/javascript" src="/javascripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/javascripts/additional-methods.js"></script>
+    <script type="text/javascript" src="/javascripts/errormessage.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <img class="logo" src="images/infinity.png"/>
+      <div class="form row">
+        <form id="passwd_form" class="form-horizontal col-sm-offset-3 col-md-offset-3 col-sm-6 col-md-6" action="/update" method="post">
+          <h3 class="col-sm-12 col-md-12 form-title">修改密码</h3>
+          
+          <div class="col-sm-12 col-sm-12 col-md-12">
+            <div class="form-group">
+              <input class="form-control required"  type="password" id="oldPassword" placeholder="旧密码" name='oldPassword' maxlength="12" />
+            </div>
+            <div class="form-group">
+              <input class="form-control required" type="password" id="newPassword" placeholder="新密码" name="newPassword" maxlength="12" />
+            </div>
+            <div class="form-group">
+              <input class="form-control required" type="password" placeholder="确认新密码" name="newrPassword" maxlength="12" />
+            </div>
+            <div class="form-group">
+              <a class="btn btn-danger pull-left half_block" href="/">取消</a>
+              <input class="btn btn-success pull-right half_block" type="submit" value="提交" />
+            </div>
+            <% if (locals.message) { %>
+              <h4 class="col-sm-12 col-md-12 errormessage"><%= message %></h4>
+            <% } locals.message = [];%>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

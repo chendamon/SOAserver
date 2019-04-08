@@ -6,7 +6,7 @@ exports.form = (req, res) => {
     res.render('login', { title: '登录' });
   }else{
     Client.find({}).sort({'created':-1}).exec(function(err,fcs){
-      res.render('apps', { username: req.session.user.truename, clients:fcs });
+      res.render('apps', { user: req.session.user, clients:fcs });
     });
   }
 

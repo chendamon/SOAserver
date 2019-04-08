@@ -13,6 +13,7 @@ var usersRouter = require('./routes/users');
 var login = require('./routes/login');
 var register = require('./routes/register');
 var apps = require('./routes/apps');
+var changePassword = require('./routes/passwd');
 
 var usercontrol = require('./middleware/user');
 var oauth2 = require('./middleware/oauth2');
@@ -56,6 +57,10 @@ router.route('/oauth2/authorize')
   .get(usercontrol.authed,oauth2.authorization)
   .post(usercontrol.authed,oauth2.decision);
 router.route('/userprofile').get(auth.tokenAuthed,usercontrol.profile);
+//2019.04.08 用户修改密码
+router.route('/passwd').post(usercontrol.authed,changePassword.form);
+//router.route('/update').post(usercontrol.authed,usercontrol.updateUser);
+app.post('/update',usercontrol.updateUser);
 
 //login and register
 app.post('/logout',apps.logout);
@@ -70,9 +75,11 @@ app.post('/openApp',openApp.openApp);
 //2019.04.07
 app.post('/relogin',usercontrol.relogin);
 
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  res.redirect('/');
 });
 
 // error handler
