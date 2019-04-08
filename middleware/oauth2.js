@@ -31,7 +31,7 @@ server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, do
     userId:user.username});
   cs.save(function(err) {
     if (err) { return done(err); }
-    console.log('code ',cs.value);
+    //console.log('code ',cs.value);
     return done(null, cs.value);
   });
 }));
@@ -43,18 +43,26 @@ exports.mytoken = function(req,res){
     if(error || !client || client.clientSecret !== req.body.client_secret){
       res.json({message:'err',data:'error'});
     }
-    console.log('token client:',client.clientId);
+    //console.log('token client:',client.clientId);
     Code.findOne({value:req.body.code}, function(err, authcode) {
       if(err || req.body.client_id !== authcode.clientId || req.body.redirect_uri !== authcode.redirectUri){
         res.json({message:'err',data:'error'});
       }
-      console.log('token code:',authcode.value);
+      //console.log('token code:',authcode.value);
       var token = uid(256);
       var at = new Token({
         value:token,
         userId:authcode.userId,
         clientId:authcode.clientId});
-      console.log('token: ',token);
+      //console.log('token: ',token);
+      //token有了新的之后把旧的删掉
+      //2019.04.07
+      Token.deleteMany({userId:authcode.userId},function(err){
+        if(err){
+          //res.json({message:'err',data:err});
+          //do nothing
+        }
+      });
       //Code用完之后可以删除
       //2019.04.05
       authcode.remove(function(err){

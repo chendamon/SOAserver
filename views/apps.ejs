@@ -9,7 +9,7 @@
   <body class="white">
     <!--标题栏-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-myprimary">
-      <div class="col-sm-offset-3 col-md-offset-3 col-sm-6 col-md-6 max-height">
+      <div class="col-sm-offset-2 col-md-offset-2 col-sm-8 col-md-8 max-height">
         <a class="navbar-brand left" href="#">
           <img class="navicon" src="/images/infinity.png"/>
         </a>
@@ -26,22 +26,33 @@
     </nav>
     <!--app列表-->
     <% clients.forEach(function(client){ %>
-    <div class="app col-sm-offset-3 col-md-offset-3 col-sm-6 col-md-6">
+    <div class="app col-sm-offset-2 col-md-offset-2 col-sm-8 col-md-8" style="padding-left:0;padding-right:0;">
       <!--卡片的标题栏-->
-      <nav class="navbar navbar-expand-lg navbar-dark bg-myprimary">
-        <div class="col-sm-12 col-md-12 max-height">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-myprimary" style="max-height:50px;padding-left:15px;padding-right:15px;">
+        <div class="" style="max-height:50px;padding-left:0px;padding-right:0px;">
           <a class="navbar-brand left" href="#">
             <img class="navicon" src="/images/<%= client.name %>.png"/>
           </a>
           <p class="nav-line"><%= client.name %></p>
           <div class="inline max-height right">
-              <button class="btn btn-success my-btn" onclick="location=' <%= client.clientUrl %> '">打开</button>
+            <!--跳转页面的优化，避免出现，登录->打开->再次登录的局面-->
+            <form action="/openApp" method="post">
+              <input type="hidden" name="clientUrl" value=<%= client.clientUrl %>/>
+              <button class="btn btn-success my-btn" type="submit">跳转到应用</button>
+            </form>
           </div>
+        </div>
       </nav>
-      <div class="description" style="padding:3px;min-height:100px;">
+      <div class="description" style="padding-left: 15px;padding-right: 15px;min-height:100px;">
         <h4 style="line-height: 150%;"><%= client.clientDes %></h4>
       </div>
     </div>
     <% }) %>
+    <!--正在开发字样-->
+    <div class="app col-sm-offset-2 col-md-offset-2 col-sm-8 col-md-8" style="height:200px;margin-top:50px;padding-left:0;padding-right:0;text-align:center;">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-myprimary" style="max-height:50px;padding-left:15px;padding-right:15px;">
+      </nav>
+      <h1 style="margin-top:50px;color:#C0C0C0;">正在开发中...</h1>
+    </div>
   </body>
 </html>

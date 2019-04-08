@@ -75,10 +75,25 @@ body {
   text-align:center;
   color:red;
 }
+.left-icon{
+  max-width: 100%;
+  height: auto;
+  overflow: hidden;
+}
 .app{
-  margin-top: 10px;
-  padding-top: 10px;
-  border:1px solid;
-  border-radius:15px;
-  box-shadow: 5px 5px 5px #2196F3;
+  margin-top: 30px;
+  padding-top: 0px;
+  border-radius:5px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.hint{
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius:5px;
+}
+.hint-text{
+    line-height: 120%;
+    font-weight: bold;
+    color:#FF3333 ;
 }

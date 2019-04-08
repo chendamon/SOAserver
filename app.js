@@ -17,6 +17,7 @@ var apps = require('./routes/apps');
 var usercontrol = require('./middleware/user');
 var oauth2 = require('./middleware/oauth2');
 var auth = require('./middleware/auth');
+var openApp = require('./middleware/open');
 
 //读取预设值
 var config = require('./config');
@@ -41,7 +42,7 @@ app.use(bodyparser.urlencoded({ extended:false }));
 app.use(session({
   secret:'sdfdasds-454-dfsadfa-sdfas',
   saveUninitialized:false,
-  resave:false,
+  resave:true,
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -64,8 +65,10 @@ app.get('/register',register.form);
 app.post('/register',usercontrol.postUser);
 app.post('/oauth2/token',oauth2.mytoken);
 
-
-
+//2019.04.05
+app.post('/openApp',openApp.openApp);
+//2019.04.07
+app.post('/relogin',usercontrol.relogin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

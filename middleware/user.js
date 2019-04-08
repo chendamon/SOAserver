@@ -2,7 +2,6 @@ var User = require('../models/user');
 var Client = require('../models/clients');
 var passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const login = require('connect-ensure-login');
 
 //用户注册
 var postUser = function(req,res){
@@ -29,6 +28,7 @@ var postUser = function(req,res){
 }
 //访问app列表前检测是否已经登录
 var authed = function(req,res,done){
+  //console.log('user now:',req.session.user);
   if(!req.session.user){
     res.redirect('/login');
     return;
@@ -70,13 +70,23 @@ var profile = function(req,res){
       res.json({data:err});
       return;
     }
-    console.log('user profile: ',user.username);
-    res.json({identifier:user.username,displayName:user.truename});
+    //console.log('user profile: ',user.username);
+    //尝试设定限额quota
+    //2019.04.06 并没有起作用
+    res.json({identifier:user.username,displayName:user.truename,Quota:'10'});
   });
+}
+//重定向解决session问题
+//2019.04.07
+var relogin = function(req,res){
+
+  req.session.user = null;
+  res.redirect('/');
 }
 module.exports = {
   postUser:postUser,
   authenticate:authenticate,
   authed:authed,
   profile:profile,
+  relogin:relogin,
 };

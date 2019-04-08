@@ -29,7 +29,7 @@
             </div>
             <% if (locals.message) { %>
               <h4 class="col-sm-12 col-md-12 errormessage"><%= message %></h4>
-            <% } %>
+            <% } locals.message = []; %>
           </div>
         </form>
       </div>

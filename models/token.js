@@ -12,6 +12,11 @@ var Token = new mongoose.Schema({
     clientId: {
       type: String,
       required: true
+    },
+    //token生成的时间
+    created:{
+      type:Date,
+      default:Date.now
     }
 });
 
