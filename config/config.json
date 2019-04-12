@@ -1,0 +1,5 @@
+{
+  "mongoose":{
+    "uri":"mongodb://sso:epbcc123@172.17.0.1:27017/SSO"
+  }
+}

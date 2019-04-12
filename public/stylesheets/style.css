@@ -110,3 +110,6 @@ body {
 #dropdownMenu:hover,.open{
   background-color: #2184F3;
 }
+.circle{
+  border-radius:5px;
+}

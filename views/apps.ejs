@@ -40,6 +40,13 @@
     <form id="cp_form" action="/passwd" method="post">
       <input type="hidden" name="username" value=<%= user.username %> />
     </form>
+    <!--clients管理-->
+    <% if(user.username == 'admin'){ %>
+    <div class = "col-sm-offset-2 col-md-offset-2 col-sm-8 col-md-8 circle" style="background-color:#2196F3;height:50px;">
+      <button class="btn btn-success my-btn" onclick="location='/clients/add'">添加客户端</button>
+      <button class="btn btn-success my-btn" onclick="location='/clients/delete'">删除客户端</button>
+    </div>
+    <% } %>
 
     <!--app列表-->
     <% clients.forEach(function(client){ %>
@@ -48,7 +55,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-myprimary" style="max-height:50px;padding-left:15px;padding-right:15px;">
         <div class="" style="max-height:50px;padding-left:0px;padding-right:0px;">
           <a class="navbar-brand left" href="#">
-            <img class="navicon" src="/images/<%= client.name %>.png"/>
+            <img class="navicon" src="/client_icons/<%= client.name %>.png"/>
           </a>
           <p class="nav-line"><%= client.name %></p>
           <div class="inline max-height right">

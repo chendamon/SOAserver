@@ -14,6 +14,7 @@ var login = require('./routes/login');
 var register = require('./routes/register');
 var apps = require('./routes/apps');
 var changePassword = require('./routes/passwd');
+var clientsRouter = require('./routes/clients');
 
 var usercontrol = require('./middleware/user');
 var oauth2 = require('./middleware/oauth2');
@@ -74,8 +75,13 @@ app.post('/oauth2/token',oauth2.mytoken);
 app.post('/openApp',openApp.openApp);
 //2019.04.07
 app.post('/relogin',usercontrol.relogin);
-
-
+//2019.04.12 clients modify
+router.route('/clients/add')
+  .get(usercontrol.superAuthed,clientsRouter.form)
+  .post(usercontrol.superAuthed,clientsRouter.saveClient);
+router.route('/clients/delete')
+  .get(usercontrol.superAuthed,clientsRouter.deleteform)
+  .post(usercontrol.superAuthed,clientsRouter.deleteClient);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

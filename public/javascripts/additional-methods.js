@@ -14,4 +14,12 @@ $(function(){
 	jQuery.validator.addMethod("notEqual",function(value,element,param){
 		return value != $(param).val();
 	},"不能相同");
+	jQuery.validator.addMethod("legaltest_clientname",function(value,element,param){
+		return  /^[\u4e00-\u9fa5]*[A-Za-z]*$/.test(value);
+	},"something");
+	//(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?
+	//是否为URL
+	jQuery.validator.addMethod("legaltest_url",function(value,element,param){
+		return  /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/.test(value);
+	},"something");
 });

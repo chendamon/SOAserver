@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>添加客户端</title>
+    <link rel="icon" type="image/x-icon" href="/images/infinity.ico">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
+    <script type="text/javascript" src="/javascripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/javascripts/additional-methods.js"></script>
+    <script type="text/javascript" src="/javascripts/errormessage.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <img class="logo" src="/images/infinity.png"/>
+      <div class="form row">
+        <form id="client_add_form" class="form-horizontal col-sm-offset-3 col-md-offset-3 col-sm-6 col-md-6" action="/clients/add" method="post">
+          <h3 class="col-sm-12 col-md-12 form-title">添加客户端</h3>
+          <div class="col-sm-12 col-sm-12 col-md-12">
+            <div class="form-group">
+              <input class="form-control required" type="text" placeholder="客户端标识" name='clientid' autofocus="autofocus"/>
+            </div>
+            <div class="form-group">
+              <input class="form-control required" type="text" placeholder="客户端名称" name="clientname"/>
+            </div>
+            <div class="form-group">
+              <input class="form-control required" type="text" placeholder="客户端URL" name="clienturl" />
+            </div>
+            <div class="form-group">
+              <input class="form-control required" type="text" placeholder="重定向URL" name="redirecturl" />
+            </div>
+            <div class="form-group">
+              <input class="form-control required" id="password" type="password" placeholder="客户端秘钥" name='clientsecret' maxlength="20" />
+            </div>
+            <div class="form-group">
+              <input class="form-control required" type="password" placeholder="确认秘钥" name="rsecret" maxlength="20" />
+            </div>
+            <div class="form-group">
+              <input class="form-control required" type="text" placeholder="客户端描述" name="des" maxlength="200" />
+            </div>
+            <div class="form-group">
+              <a class="btn btn-danger pull-left half_block" href="/">返回</a>
+              <input class="btn btn-success pull-right half_block" type="submit" value="确认" />
+            </div>
+            <% if (locals.message) { %>
+              <h4 class="col-sm-12 col-md-12 errormessage"><%= message %></h4>
+            <% } locals.message = [];%>
+          </div>
+        </form>
+      </div>
+      <!--各种格式的提示信息-->
+      <!--div class="hint col-sm-offset-3 col-md-offset-3 col-sm-6 col-md-6">
+          <div style="text-align:center;">
+            <h3 style="color:#FF3333;font-weight:bold;">注意事项</h3>
+          </div>
+          <h4 class="hint-text">1.用户名只能包含字母和数字，并且只能以字母开头，长度在3-12个字符之间；<h4>
+          <h4 class="hint-text">2.真实姓名只能包含汉字和字母，并且只能以字母开头，长度在3-12个字符之间；<h4>
+          <h4 class="hint-text">3.密码只能包含字母数字及“!”、“@”、“#”，“$”，“_”，长度在6-12个字符之间；<h4>
+      </div-->
+    </div>
+  </body>
+</html>

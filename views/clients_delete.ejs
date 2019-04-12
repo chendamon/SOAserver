@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>应用列表</title>
+    <link rel="icon" type="image/x-icon" href="/images/infinity.ico">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script type="text/javascript" src="/javascripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+  </head>
+  <body class="white">
+    <!--app列表-->
+    <% clients.forEach(function(client){ %>
+    <div class="app col-sm-offset-2 col-md-offset-2 col-sm-8 col-md-8" style="padding-left:0;padding-right:0;">
+      <!--卡片的标题栏-->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-myprimary" style="max-height:50px;padding-left:15px;padding-right:15px;">
+        <div class="" style="max-height:50px;padding-left:0px;padding-right:0px;">
+          <a class="navbar-brand left" href="#">
+            <img class="navicon" src="/client_icons/<%= client.name %>.png"/>
+          </a>
+          <p class="nav-line"><%= client.name %></p>
+          <div class="inline max-height right">
+            <!--跳转页面的优化，避免出现，登录->打开->再次登录的局面-->
+            <form action="/clients/delete" method="post">
+              <input type="hidden" name="clientid" value=<%= client.clientId %> />
+              <button class="btn btn-danger my-btn" type="submit">删除客户端</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+      <div class="description" style="padding-left: 15px;padding-right: 15px;min-height:100px;">
+        <h4 style="line-height: 150%;"><%= client.clientDes %></h4>
+      </div>
+    </div>
+    <% }) %>
+  </body>
+</html>

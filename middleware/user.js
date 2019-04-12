@@ -39,6 +39,22 @@ var authed = function(req,res,done){
   }
 
 }
+//确认当前登录用户是否为admin
+//2019.04.12
+var superAuthed = function(req,res,done){
+  if(!req.session.user){
+    res.redirect('/login');
+    return;
+  }else{
+    req.user = req.session.user;
+    if(req.session.user.username !== 'admin'){
+      res.redirect('/login');
+      return;
+    }else{
+      done(null,req.user);
+    }
+  }
+}
 //登录认证
 var authenticate = function(req,res){
   User.findOne({ username:req.body.username },function(err,user){
@@ -123,4 +139,5 @@ module.exports = {
   profile:profile,
   relogin:relogin,
   updateUser:updateUser,
+  superAuthed:superAuthed,
 };
