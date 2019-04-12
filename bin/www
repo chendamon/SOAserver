@@ -7,14 +7,16 @@
 var app = require('../app');
 var debug = require('debug')('boaserver:server');
 var http = require('http');
-var config = require('../config');
-
+//https
+// var https = require('https');
+// var fs = require('fs');
+// var privateKey = fs.readFileSync(process.cwd()+'/private.pem','utf-8');
+// var cert = fs.readFileSync(process.cwd()+'/site.crt','utf-8');
 /**
  * Get port from environment and store in Express.
  */
 
-//var port = normalizePort(process.env.PORT || '3000');
-var port = config.get('port');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
@@ -22,6 +24,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+//var server = https.createServer({key:privateKey,cert:cert},app);
 
 /**
  * Listen on provided port, on all network interfaces.
